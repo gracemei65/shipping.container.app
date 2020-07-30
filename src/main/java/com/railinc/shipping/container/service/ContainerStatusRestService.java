@@ -1,7 +1,9 @@
 package com.railinc.shipping.container.service;
 
+import com.railinc.shipping.container.exception.EntityNotFoundException;
 import com.railinc.shipping.container.model.ContainerStatus;
 import com.railinc.shipping.container.repository.ContainerStatusRepository;
+import com.railinc.shipping.container.util.DateFormatUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,13 +22,14 @@ public class ContainerStatusRestService {
         List<ContainerStatus> statuses = repository.findByContainerOwnerId(ownerId);
 
         return statuses = statuses.stream()
-                    .filter(status ->"AVAILABLE".equals(status.getStatus()))
-                    .collect(Collectors.toList());
+                .filter(status -> "AVAILABLE".equals(status.getStatus()))
+                .peek(status -> status.setEventTimestamp(DateFormatUtil.formatTime(status.getEventTimestampEpoch())))
+                .collect(Collectors.toList());
     }
 
     public ContainerStatus createContainer(@PathVariable Integer ownerId) {
-        ContainerStatus status =new ContainerStatus();
-        status.setContainerId(1);
+        ContainerStatus status = new ContainerStatus();
+        //status.setContainerId(1);
         status.setContainerOwnerId(ownerId);
         status.setCustomerId(0);
         status.setStatus("AVAILABLE");
@@ -34,17 +37,20 @@ public class ContainerStatusRestService {
         return repository.save(status);
     }
 
-    public ContainerStatus updateContainer(Integer containerId, String status){
+    public ContainerStatus updateContainer(Integer containerId, String status) {
         Optional<ContainerStatus> optional = repository.findById(containerId); // returns java8 optional
-//        if (!optional.isPresent())
-//            throw new EntityNotFoundException("Container  is not found with containerId  " + containerId);
+        if (!optional.isPresent())
+            throw new EntityNotFoundException("Container "+containerId +" is not found  ");
         ContainerStatus container = optional.get();
         container.setStatus(status);
-       return  repository.save(container);
+        return repository.save(container);
 
     }
 
-    public void deleteContainer(Integer containerId){
-          repository.deleteById(containerId);
+    public void deleteContainer(Integer containerId) {
+        Optional<ContainerStatus> optional = repository.findById(containerId); // returns java8 optional
+        if (!optional.isPresent())
+            throw new EntityNotFoundException("Container "+containerId +" is not found  ");
+        repository.deleteById(containerId);
     }
 }

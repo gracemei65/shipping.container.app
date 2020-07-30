@@ -30,7 +30,7 @@ public class ContainerStatusRestController {
     }
 
     @PutMapping("/container/{containerId}")
-    public void updateContainer(@PathVariable Integer containerId, @RequestParam  String status) {
+    public void updateContainer(@PathVariable Integer containerId, @RequestParam String status) {
         service.updateContainer(containerId, status);
 
     }

@@ -1,5 +1,7 @@
 package com.railinc.shipping.container.model;
 
+import com.railinc.shipping.container.util.DateFormatUtil;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -9,7 +11,7 @@ import java.sql.Timestamp;
 @Table(name = "CONTAINER_STATUS")
 public class ContainerStatus  {
     @Id
-    //@GeneratedValue
+    @GeneratedValue
     @Column(name = "ID", unique=true)
     private Integer containerId;
     @Column(name = "OWNER_ID")

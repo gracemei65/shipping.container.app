@@ -16,11 +16,5 @@ public class Application   {
 		SpringApplication.run(Application.class, args);
 	}
 
-	@Autowired
-	private JmsTemplate jmsTemplate;
-
-	@Autowired
-	private Queue queue;
-
 
 }
