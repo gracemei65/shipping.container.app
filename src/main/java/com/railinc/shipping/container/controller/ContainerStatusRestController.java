@@ -4,18 +4,17 @@ package com.railinc.shipping.container.controller;
 import java.util.List;
 
 import com.railinc.shipping.container.model.ContainerStatus;
-import com.railinc.shipping.container.repository.ContainerStatusRepository;
-import com.railinc.shipping.container.service.ContainerStatusService;
+import com.railinc.shipping.container.service.ContainerStatusRestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 @RequestMapping(value = "/shipping")
-public class ContainerStatusController {
+public class ContainerStatusRestController {
 
     @Autowired
-    private ContainerStatusService service;
+    private ContainerStatusRestService service;
 
     @GetMapping("/container/{ownerId}")
     public List<ContainerStatus> getContainersByOwner(@PathVariable Integer ownerId) {

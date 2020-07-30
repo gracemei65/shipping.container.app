@@ -11,13 +11,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class ContainerStatusService {
+public class ContainerStatusRestService {
 
     @Autowired
     private ContainerStatusRepository repository;
 
     public List<ContainerStatus> getContainersByOwner(@PathVariable Integer ownerId) {
-        List<ContainerStatus> statuses = repository.findByOwnerId(ownerId);
+        List<ContainerStatus> statuses = repository.findByContainerOwnerId(ownerId);
 
         return statuses = statuses.stream()
                     .filter(status ->"AVAILABLE".equals(status.getStatus()))
@@ -26,7 +26,8 @@ public class ContainerStatusService {
 
     public ContainerStatus createContainer(@PathVariable Integer ownerId) {
         ContainerStatus status =new ContainerStatus();
-        status.setOwnerId(ownerId);
+        status.setContainerId(1);
+        status.setContainerOwnerId(ownerId);
         status.setCustomerId(0);
         status.setStatus("AVAILABLE");
         status.setEventTimestampEpoch(System.currentTimeMillis());

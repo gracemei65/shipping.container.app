@@ -1,18 +1,19 @@
 package com.railinc.shipping.container.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 
 @Entity
 @Table(name = "CONTAINER_STATUS")
-public class ContainerStatus {
+public class ContainerStatus  {
     @Id
-    @GeneratedValue
-    @Column(unique=true)
-    private Integer id;
+    //@GeneratedValue
+    @Column(name = "ID", unique=true)
+    private Integer containerId;
     @Column(name = "OWNER_ID")
-    private Integer ownerId;
+    private Integer containerOwnerId;
     @Column(name = "CUSTOMER_ID")
     private Integer customerId;
     @Column(name = "STATUS")
@@ -22,15 +23,20 @@ public class ContainerStatus {
     @Transient
     private String eventTimestamp;
 
-    public ContainerStatus() {
+    public Integer getContainerId() {
+        return containerId;
     }
 
-    public Integer getOwnerId() {
-        return ownerId;
+    public void setContainerId(Integer containerId) {
+        this.containerId = containerId;
     }
 
-    public void setOwnerId(Integer ownerId) {
-        this.ownerId = ownerId;
+    public Integer getContainerOwnerId() {
+        return containerOwnerId;
+    }
+
+    public void setContainerOwnerId(Integer containerOwnerId) {
+        this.containerOwnerId = containerOwnerId;
     }
 
     public Integer getCustomerId() {
@@ -63,5 +69,17 @@ public class ContainerStatus {
 
     public void setEventTimestamp(String eventTimestamp) {
         this.eventTimestamp = eventTimestamp;
+    }
+
+    @Override
+    public String toString() {
+        return "ContainerStatus{" +
+                "containerId=" + containerId +
+                ", containerOwnerId=" + containerOwnerId +
+                ", customerId=" + customerId +
+                ", status='" + status + '\'' +
+                ", eventTimestampEpoch=" + eventTimestampEpoch +
+                ", eventTimestamp='" + eventTimestamp + '\'' +
+                '}';
     }
 }
