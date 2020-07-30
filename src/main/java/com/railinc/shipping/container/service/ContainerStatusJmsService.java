@@ -11,6 +11,8 @@ import com.railinc.shipping.container.model.CONTAINER;
 import com.railinc.shipping.container.model.ContainerStatus;
 import com.railinc.shipping.container.repository.ContainerStatusRepository;
 import com.railinc.shipping.container.util.DateFormatUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
@@ -20,8 +22,22 @@ import java.awt.*;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * JMS message listener and processor including
+ * 1. Read a container status message from queue, STATUS.INBOUND.QUEUE
+ * 2. If the timestamp of the message is after the most recent in the table for the containerId,
+ * then add the record to the table and
+ * 3. If the timestamp is before that most recent table for the container id or the message
+ * does not meet the validations for the JSON, place the record on the dead-letter queue STATUS.INBOUND.QUEUE.DLQ
+ *
+ * @author  Grace Gong
+ * @version 1.0
+ * @since   2020-07-30
+ */
 @Service
 public class ContainerStatusJmsService {
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private Gson gson;
@@ -31,21 +47,27 @@ public class ContainerStatusJmsService {
     @Autowired
     private JmsTemplate jmsTemplate;
 
+    /**
+     * listen STATUS.INBOUND.QUEUE message
+     */
     @JmsListener(destination = ContainerStatusConstants.STATUS_INBOUND_QUEUE, containerFactory = "myFactory")
     public void receiveMessage(String message) {
 
-        System.out.println("receive  message  : " + message);
+        logger.info("receive  message  : " + message);
         processMessage(message);
     }
 
+    /**
+     * Process STATUS.INBOUND.QUEUE message
+     */
     public void processMessage(String message) {
+
         try {
             JsonParser parser = new JsonParser();
             parser.parse(message);
         } catch (JsonSyntaxException jse) {
             //If the message is not valid JSON, place the record on the dead-letter queue STATUS.INBOUND.QUEUE.DLQ
-
-            System.out.println(" sending invalid json message to " + ContainerStatusConstants.STATUS_INBOUND_QUEUE_DLQ);
+            logger.error(" invalid json message and place it to dead-letter queue STATUS.INBOUND.QUEUE.DLQ " + ContainerStatusConstants.STATUS_INBOUND_QUEUE_DLQ);
             jmsTemplate.convertAndSend(ContainerStatusConstants.STATUS_INBOUND_QUEUE_DLQ, message);
             return;
         }
@@ -74,27 +96,21 @@ public class ContainerStatusJmsService {
                         container.setCUSTOMER_ID(containerStatus.getCustomerId());
 
                         String xmlMessage = xmlMapper.writeValueAsString(container).toUpperCase();
-                        System.out.println("send xmlMessage to STATUS.OUTBOUND.QUEUE  " + xmlMessage);
+                        logger.info("send xmlMessage to STATUS.OUTBOUND.QUEUE  " + xmlMessage);
                         jmsTemplate.convertAndSend(ContainerStatusConstants.STATUS_OUTBOUND_QUEUE, message);
                     } catch (JsonProcessingException e) {
-                        e.printStackTrace();
+                        logger.error(" JsonProcessingException throw and put it to dead-letter queue STATUS.INBOUND.QUEUE.DLQ " + ContainerStatusConstants.STATUS_INBOUND_QUEUE_DLQ);
                     }
                 } else {
                     //If the timestamp is before that most recent table for the container place the record on the dead-letter queue STATUS.INBOUND.QUEUE.DLQ
-                    System.out.println(" sending stale message to " + ContainerStatusConstants.STATUS_INBOUND_QUEUE_DLQ);
+                    logger.warn(" sending stale message to " + ContainerStatusConstants.STATUS_INBOUND_QUEUE_DLQ);
                     jmsTemplate.convertAndSend(ContainerStatusConstants.STATUS_INBOUND_QUEUE_DLQ, message);
                 }
             } else {
-                System.out.println(" container " + containerId + " does not existing yet and treat it as invalid one and  send to " + ContainerStatusConstants.STATUS_INBOUND_QUEUE_DLQ);
+                logger.warn(" container " + containerId + " does not exist in db yet and treat it as invalid one and  send to " + ContainerStatusConstants.STATUS_INBOUND_QUEUE_DLQ);
                 jmsTemplate.convertAndSend(ContainerStatusConstants.STATUS_INBOUND_QUEUE_DLQ, message);
             }
-
-
         }
-
-
-        System.out.println("process  message  : " + containerStatus);
-
 
     }
 }

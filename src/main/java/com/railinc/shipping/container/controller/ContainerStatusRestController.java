@@ -6,9 +6,17 @@ import java.util.List;
 import com.railinc.shipping.container.model.ContainerStatus;
 import com.railinc.shipping.container.service.ContainerStatusRestService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+/**
+ * Rest APIs endpoints to perform CRUD operation against H2 Inmemory CONTAINER_STATUS table
+ *
+ * @author  Grace Gong
+ * @version 1.0
+ * @since   2020-07-30
+ */
 @RestController
 @RequestMapping(value = "/shipping")
 public class ContainerStatusRestController {
@@ -16,31 +24,43 @@ public class ContainerStatusRestController {
     @Autowired
     private ContainerStatusRestService service;
 
-    @GetMapping("/container/{ownerId}")
-    public List<ContainerStatus> getContainersByOwner(@PathVariable Integer ownerId) {
-        return service.getContainersByOwner(ownerId);
+    /**
+     * Return a list of "AVAILABLE" containers based on containerOwnerId
+     */
+    @GetMapping("/container/{containerOwnerId}")
+    public List<ContainerStatus> getContainersByOwner(@PathVariable Integer containerOwnerId) {
+        return service.getContainersByOwner(containerOwnerId);
 
     }
 
-    @PostMapping("/container/{ownerId}")
-    public ContainerStatus createContainer(@PathVariable Integer ownerId) {
+    /**
+     * Add a new container by supplying containerOwnerId
+     * (customerId should default to 0, status should default to AVAILABLE)
+     */
+    @PostMapping("/container/{containerOwnerId}")
+    public ContainerStatus createContainer(@PathVariable Integer containerOwnerId) {
 
-        return service.createContainer(ownerId);
+        return service.createContainer(containerOwnerId);
 
     }
 
+    /**
+     * Update the status of an existing container
+     */
     @PutMapping("/container/{containerId}")
-    public void updateContainer(@PathVariable Integer containerId, @RequestParam String status) {
-        service.updateContainer(containerId, status);
+    public ContainerStatus updateContainer(@PathVariable Integer containerId, @RequestParam String status) {
+
+        return service.updateContainer(containerId, status);
 
     }
 
+    /**
+     * Delete a container by container id
+     */
     @DeleteMapping("/container/{containerId}")
-    public void deleteContainer(@PathVariable Integer containerId) {
+    public ResponseEntity<String> deleteContainer(@PathVariable Integer containerId) {
 
-        service.deleteContainer(containerId);
+        return service.deleteContainer(containerId);
 
     }
-
-
 }
