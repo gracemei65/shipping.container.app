@@ -41,7 +41,6 @@ public class ContainerStatusRestController {
     public ContainerStatus createContainer(@PathVariable Integer containerOwnerId) {
 
         return service.createContainer(containerOwnerId);
-
     }
 
     /**
@@ -51,14 +50,13 @@ public class ContainerStatusRestController {
     public ContainerStatus updateContainer(@PathVariable Integer containerId, @RequestParam String status) {
 
         return service.updateContainer(containerId, status);
-
     }
 
     /**
      * Delete a container by container id
      */
     @DeleteMapping("/container/{containerId}")
-    public ResponseEntity<String> deleteContainer(@PathVariable Integer containerId) {
+    public String deleteContainer(@PathVariable Integer containerId) {
 
         return service.deleteContainer(containerId);
 

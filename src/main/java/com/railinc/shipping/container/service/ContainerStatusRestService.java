@@ -41,6 +41,7 @@ public class ContainerStatusRestService {
         status.setStatus("AVAILABLE");
         status.setEventTimestampEpoch(System.currentTimeMillis());
         return repository.save(status);
+
     }
 
     public ContainerStatus updateContainer(Integer containerId, String status) {
@@ -52,20 +53,18 @@ public class ContainerStatusRestService {
 
         ContainerStatus container = optional.get();
         container.setStatus(status);
-        logger.error("update container " + containerId + " successfully  ");
         return repository.save(container);
-
     }
 
-    public ResponseEntity<String> deleteContainer(Integer containerId) {
+    public String deleteContainer(Integer containerId) {
         Optional<ContainerStatus> optional = repository.findById(containerId); // returns java8 optional
         if (!optional.isPresent()) {
             logger.info("Container " + containerId + " is not found  ");
             throw new EntityNotFoundException("Container " + containerId + " is not found  ");
         }
         repository.deleteById(containerId);
-        String msg ="delete container " + containerId + " successfully  ";
-        logger.error(msg);
-        return new ResponseEntity<String>(msg, HttpStatus.OK);
+        String msg ="container deleted successfully!";
+        logger.info(msg);
+        return msg;
     }
 }
