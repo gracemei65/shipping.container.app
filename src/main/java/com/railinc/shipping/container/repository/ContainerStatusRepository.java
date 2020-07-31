@@ -8,7 +8,6 @@ import java.util.Optional;
 
 public interface ContainerStatusRepository extends JpaRepository<ContainerStatus, Integer> {
 
-
     List<ContainerStatus> findByContainerOwnerId(Integer ownerId);
     Optional<ContainerStatus> findById(Integer id);
 

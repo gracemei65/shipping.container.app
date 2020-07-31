@@ -1,14 +1,10 @@
 package com.railinc.shipping.container.controller;
 
-
-import java.util.List;
-
 import com.railinc.shipping.container.model.ContainerStatus;
 import com.railinc.shipping.container.service.ContainerStatusRestService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import java.util.List;
 
 /**
  * Rest APIs endpoints to perform CRUD operation against H2 Inmemory CONTAINER_STATUS table

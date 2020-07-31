@@ -12,7 +12,7 @@
 	<artifactId>shipping.container.app</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>shipping.container.app</name>
-	<description>Demo project for Spring Boot, H2, JMS/MemoryActiveMQ </description>
+	<description>Demo project for Spring Boot, H2, JMS InMemoryActiveMQ </description>
 
 	<properties>
 		<java.version>11</java.version>
@@ -107,9 +107,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>shipping-container-app</finalName>
 	</build>
-
-
-
 
 </project>

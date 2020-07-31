@@ -4,19 +4,11 @@
  */
 package com.railinc.shipping.container.util;
 
-/**
- * Created by Grace Gong on 1/7/19.
- */
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-
-import java.util.ArrayList;
-import java.util.List;
-
 /*
- * Use the Jackson JSON utility
+ * Jackson JSON utility
  */
 public class JSONUtil {
     private static ObjectMapper mapper = new ObjectMapper();
@@ -48,7 +40,4 @@ public class JSONUtil {
        System.out.println("current time in millis " +epoch);
 
     }
-
-
-
 }

@@ -1,7 +1,3 @@
-/**
- * ﻿Copyright ©2018 Sensus
- * All rights reserved
- */
 package com.railinc.shipping.container.config;
 
 import org.springframework.context.annotation.Bean;
@@ -21,15 +17,4 @@ public class AppSwagger2Config {
                 .apis(RequestHandlerSelectors.basePackage("com.railinc.shipping.container")).build();
     }
 
-    //    /**
-    //     * ignore null fields when serializing a java class globally
-    //     *
-    //     * @return
-    //     */
-    //    @Bean
-    //    public ObjectMapper objectMapper() {
-    //        ObjectMapper mapper = new ObjectMapper();
-    //        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-    //        return mapper;
-    //    }
 }
