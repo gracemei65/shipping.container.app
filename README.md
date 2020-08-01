@@ -19,9 +19,9 @@ Run APP and Test in Docker container
 
 4. view log : "docker exec -it <DOCKER_CONTAINER_ID> /bin/bash" and cd /var/log/shipping-container-app.log
 
-5. Refer Swagger document: http://<YOUR_IP>:9090/swagger-ui.html , 
+5. Refer Swagger document: http://<YOUR_DOCKER_HOST_IP>:9090/swagger-ui.html , 
         
-6. view H2 db data : http://<YOUR_IP>:9090/h2-console and type password
+6. view H2 db data : http://<YOUR_DOCKER_HOST_IP>:9090/h2-console and type password
 
 Run APP and Test locally
 github link: https://github.com/gracemei65/shipping.container.app
@@ -30,6 +30,7 @@ github link: https://github.com/gracemei65/shipping.container.app
 2. cd shipping.container.app 
 3. mvn clean install 
 4. mvn spring-boot:run -Dspring-boot.run.arguments=--activemq.broker.url=tcp:///<YOUR_BROKER_IP>:61616
+5. Swagger document: http://<YOUR_HOST_IP>:9090/swagger-ui.html
 
 
 
