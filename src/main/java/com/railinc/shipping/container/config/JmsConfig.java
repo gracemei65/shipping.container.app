@@ -2,6 +2,8 @@ package com.railinc.shipping.container.config;
 
 import javax.jms.ConnectionFactory;
 
+import org.apache.activemq.ActiveMQConnectionFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
@@ -20,20 +22,35 @@ import org.springframework.jms.support.converter.MessageType;
 @Configuration
 public class JmsConfig {
 
-    @Bean
-    public JmsListenerContainerFactory<?> myFactory(ConnectionFactory connectionFactory,
-                                                    DefaultJmsListenerContainerFactoryConfigurer configurer) {
-        DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
-        configurer.configure(factory, connectionFactory);
+    @Value("${activemq.broker-url}")
+    private String brokerUrl;
 
+//    @Bean
+//    public JmsListenerContainerFactory<?> myFactory(ConnectionFactory connectionFactory,
+//                                                    DefaultJmsListenerContainerFactoryConfigurer configurer) {
+//        DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
+//        configurer.configure(factory, connectionFactory);
+//
+//        return factory;
+//    }
+//
+//    @Bean
+//    public MessageConverter jacksonJmsMessageConverter() {
+//        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
+//        converter.setTargetType(MessageType.TEXT);
+//        converter.setTypeIdPropertyName("_type");
+//        return converter;
+//    }
+
+    @Bean
+    public ActiveMQConnectionFactory activeMQConnectionFactory() {
+        ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory();
+        factory.setBrokerURL(brokerUrl);
         return factory;
     }
 
     @Bean
-    public MessageConverter jacksonJmsMessageConverter() {
-        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
-        converter.setTargetType(MessageType.TEXT);
-        converter.setTypeIdPropertyName("_type");
-        return converter;
+    public JmsTemplate jmsTemplate() {
+        return new JmsTemplate(activeMQConnectionFactory());
     }
 }

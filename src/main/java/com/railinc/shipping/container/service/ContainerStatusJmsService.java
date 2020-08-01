@@ -47,7 +47,7 @@ public class ContainerStatusJmsService {
     /**
      * listen STATUS.INBOUND.QUEUE message
      */
-    @JmsListener(destination = ContainerStatusConstants.STATUS_INBOUND_QUEUE, containerFactory = "myFactory")
+    @JmsListener(destination = ContainerStatusConstants.STATUS_INBOUND_QUEUE)
     public void receiveMessage(String message) {
 
         logger.info("receive  message  : " + message);
