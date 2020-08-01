@@ -22,7 +22,7 @@ import org.springframework.jms.support.converter.MessageType;
 @Configuration
 public class JmsConfig {
 
-    @Value("${activemq.broker-url}")
+    @Value("${activemq.broker.url}")
     private String brokerUrl;
 
 //    @Bean

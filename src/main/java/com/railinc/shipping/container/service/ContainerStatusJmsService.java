@@ -94,7 +94,7 @@ public class ContainerStatusJmsService {
 
                         String xmlMessage = xmlMapper.writeValueAsString(container).toUpperCase();
                         logger.info("send xmlMessage to STATUS.OUTBOUND.QUEUE  " + xmlMessage);
-                        jmsTemplate.convertAndSend(ContainerStatusConstants.STATUS_OUTBOUND_QUEUE, message);
+                        jmsTemplate.convertAndSend(ContainerStatusConstants.STATUS_OUTBOUND_QUEUE, xmlMessage);
                     } catch (JsonProcessingException e) {
                         logger.error(" JsonProcessingException throw and put it to dead-letter queue STATUS.INBOUND.QUEUE.DLQ " + ContainerStatusConstants.STATUS_INBOUND_QUEUE_DLQ);
                     }
