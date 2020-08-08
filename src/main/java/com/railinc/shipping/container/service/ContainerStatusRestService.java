@@ -22,6 +22,12 @@ public class ContainerStatusRestService {
     @Autowired
     private ContainerStatusRepository repository;
 
+    public List<ContainerStatus> getAllContainers() {
+
+        List<ContainerStatus> statuses = repository.findAll();
+
+        return statuses;
+    }
     public List<ContainerStatus> getContainersByOwner(@PathVariable Integer ownerId) {
         List<ContainerStatus> statuses = repository.findByContainerOwnerId(ownerId);
 

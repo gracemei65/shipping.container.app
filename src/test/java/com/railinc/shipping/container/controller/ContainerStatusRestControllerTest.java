@@ -86,7 +86,7 @@ public class ContainerStatusRestControllerTest {
                 service.createContainer(Mockito.anyInt())).thenReturn(mockContainerStatus);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/shipping/container/1")
+                .post("/shipping/containers/1")
                 .accept(MediaType.APPLICATION_JSON).content(json)
                 .contentType(MediaType.APPLICATION_JSON);
 
@@ -121,7 +121,7 @@ public class ContainerStatusRestControllerTest {
                 .thenReturn(list);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .get("/shipping/container/1")
+                .get("/shipping/containers/1")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON);
 
@@ -148,7 +148,7 @@ public class ContainerStatusRestControllerTest {
                         Mockito.any(String.class))).thenReturn(mockContainerStatus);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .put("/shipping/container/1?status=WAITING_FOR_PICKUP")
+                .put("/shipping/containers/1?status=WAITING_FOR_PICKUP")
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON);
@@ -176,7 +176,7 @@ public class ContainerStatusRestControllerTest {
         Mockito.when(
                 service.deleteContainer(Mockito.any(Integer.class))).thenReturn("container deleted successfully!");
         RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .delete("/shipping/container/1")
+                .delete("/shipping/containers/1")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON);
 
